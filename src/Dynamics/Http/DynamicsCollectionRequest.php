@@ -165,7 +165,7 @@ class DynamicsCollectionRequest extends DynamicsRequest
            all of the response data, not just the objects */
         $this->returnType = null;
 
-        $this->addHeaders(['Prefer'=>"odata.maxpagesize=${$this->pageSize}"]);
+        $this->addHeaders(['Prefer'=>"odata.maxpagesize={$this->pageSize}"]);
         if ($this->end) {
             trigger_error('Reached end of collection');
             return null;
