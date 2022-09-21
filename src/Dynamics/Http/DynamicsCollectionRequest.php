@@ -165,19 +165,24 @@ class DynamicsCollectionRequest extends DynamicsRequest
            all of the response data, not just the objects */
         $this->returnType = null;
 
+        $this->addHeaders(['Prefer'=>"odata.maxpagesize=${$this->pageSize}"]);
         if ($this->end) {
             trigger_error('Reached end of collection');
             return null;
         }
 
+       $queryData=[];
+
         // Build the page navigation query string
-        $query = '$top=' . $this->pageSize;
         if ($this->skipToken) {
-            $query .='&$skiptoken=' . $this->skipToken;
+            $queryData['$skiptoken'] = $this->skipToken;
         }
         if ($prev) {
-            $query .='&previous-page=true';
+            $queryData['previous-page'] = 'true';
         }
+
+        // The data are alread url encoded
+        $query = urldecode(http_build_query($queryData));
 
         $this->endpoint = $this->endpoint . $this->getConcatenator() . $query;
         return $this;
